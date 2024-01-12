@@ -1,5 +1,5 @@
 
-version: '3.8'
+version: '3.9'
 
 services:
   app:
@@ -11,19 +11,21 @@ services:
       - db
     volumes:
       - ./src:/app/src
+      - node_modules:/app/node_modules
   db:
     image: mysql:8.0
     container_name: mysql-db
     restart: always
     environment:
       MYSQL_DATABASE: blog
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_USER: ussef
+      MYSQL_PASSWORD: 927640
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
     volumes:
       - db_data:/var/lib/mysql
     ports:
       - '3306:3306'
-
 volumes:
   db_data:
+  node_modules:
