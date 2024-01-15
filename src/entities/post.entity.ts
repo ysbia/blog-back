@@ -14,7 +14,7 @@ export class Post {
   content: string;
 
   @Column({ default: true })
-  isArchive: boolean;
+  isArchived: boolean;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
