@@ -1,15 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { diskStorage } from 'multer';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './upload',
+      filename: (req, file, cb) => {
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')
+        return cb(null, `${randomName}${file.originalname}`)
+      },
+    }),
+  }))
+  create(@Req() req, @Body() createUserDto: CreateUserDto, @UploadedFile(
+    new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000000 }),
+        new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+      ],
+    }),
+  ) file : Express.Multer.File) {
     createUserDto = {
       ...createUserDto,
       password: bcrypt.hashSync(createUserDto.password, 10),
