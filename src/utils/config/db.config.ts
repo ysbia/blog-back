@@ -5,9 +5,9 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   host: 'mysql-db',
   port: 3306,
   username: 'ussef',
-  password: '927640',
+  password: 'ussef',
   database: 'blog',
-  entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  entities: [__dirname + '/../../**/*.entity.{js,ts}'],
   synchronize: true,
   autoLoadEntities: true,
 };

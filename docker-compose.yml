@@ -10,8 +10,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ./src:/app/src
-      - node_modules:/app/node_modules
+      - .:/app
+      - /app/node_modules
   db:
     image: mysql:8.0
     container_name: mysql-db
@@ -19,7 +19,7 @@ services:
     environment:
       MYSQL_DATABASE: blog
       MYSQL_USER: ussef
-      MYSQL_PASSWORD: 927640
+      MYSQL_PASSWORD: ussef
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: '%'
     volumes:
